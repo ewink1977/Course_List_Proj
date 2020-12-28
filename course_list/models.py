@@ -5,10 +5,9 @@ class Courses(models.Model):
     name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
 class Descriptions(models.Model):
     desc = models.TextField()
-    course = models.ForeignKey(Courses, related_name="description", on_delete = models.CASCADE)
+    course = models.OneToOneField(Courses, on_delete=models.CASCADE, related_name="course_desc")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

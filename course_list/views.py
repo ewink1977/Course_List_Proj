@@ -1,4 +1,4 @@
-from course_list.models import Courses, Descriptions
+from course_list.models import Comments, Courses, Descriptions
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
@@ -32,3 +32,17 @@ def destroy_course(request, killid):
         byebye = Courses.objects.get(id=killid)
         byebye.delete()
         return redirect('home')
+
+def show_course(request, courseid):
+    context = {
+        "courseinfo" : Courses.objects.get(id=courseid),
+        "comments" : Comments.objects.filter(course_comment=courseid),
+    }
+    return render(request, 'html/coursepage.html', context)
+
+def add_comment(request, courseid):
+    if request.method == 'POST':
+        attachto = Courses.objects.get(id=courseid)
+        Comments.objects.create(user=request.POST['commentor'], text=request.POST['commentbody'], course_comment=attachto)
+        messages.success(request, f"Comment successfully added.")
+    return redirect('show_course', courseid)
